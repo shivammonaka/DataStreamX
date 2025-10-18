@@ -1,0 +1,50 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: Proxy-Service
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+      # Serializer classes
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+      # --- Performance tuning ---
+      batch-size: 65536            # 64 KB per partition buffer
+      linger-ms: 20                # wait up to 20ms to fill batch before sending
+      buffer-memory: 33554432      # 32 MB producer-side memory buffer
+      compression-type: lz4        # fast and efficient compression
+
+      # --- Reliability & ordering ---
+      acks: all                    # leader + replicas must confirm write
+      retries: 5                   # retry transient send failures
+      enable-idempotence: true     # ensures no duplicates if retries happen
+      max-in-flight-requests-per-connection: 1 # preserves message order under retries
+
+    # Optional consumer settings (useful if you ever read from Kafka in the proxy)
+    consumer:
+      group-id: proxy-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+logging:
+  level:
+    root: INFO
+    org.apache.kafka.clients.producer: INFO
+    org.springframework.kafka: INFO
+
+app:
+  kafka:
+    # your logical topic for batched logs
+    topic-name: producer-logs
+
+  logging:
+    # flush interval for your batch scheduler (in ms)
+    interval-ms: 50
+    # allowed log levels to simulate or filter
+    levels: INFO,ERROR,DEBUG
