@@ -27,11 +27,11 @@ spring:
       max-in-flight-requests-per-connection: 1 # preserves message order under retries
 
     # Optional consumer settings (useful if you ever read from Kafka in the proxy)
-    consumer:
-      group-id: proxy-service
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#    consumer:
+#      group-id: proxy-service
+#      auto-offset-reset: earliest
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 logging:
   level:

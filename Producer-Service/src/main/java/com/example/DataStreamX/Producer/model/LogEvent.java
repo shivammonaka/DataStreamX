@@ -5,14 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Simple DTO for a log event that will be serialized to JSON and sent to Kafka.
+ * Represents a single log event emitted by any microservice.
+ * Will be serialized to JSON and forwarded to the Proxy-Service.
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class LogEvent {
-    private String serviceName;
-    private String level;
-    private String message;
-    private long timestamp;
+
+    private String microServiceName; // name of microservice generating the log
+    private String level;            // log level: INFO, ERROR, DEBUG, etc.
+    private String message;          // log message content
+    private long timestamp;          // original event timestamp (epoch millis)
 }

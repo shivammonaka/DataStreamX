@@ -1,0 +1,48 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: Consumer-Service
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    consumer:
+      group-id: consumer-service
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+      # --- Reliability & throughput ---
+      enable-auto-commit: false     # manually acknowledge after processing
+      max-poll-records: 100         # batch fetch size
+      fetch-min-bytes: 50000        # wait until we get at least 50KB of data
+      fetch-max-wait-ms: 500        # max wait for batch
+      heartbeat-interval: 3000
+      session-timeout-ms: 10000
+      isolation-level: read_committed
+
+    listener:
+      ack-mode: manual
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/datastreamx
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    root: INFO
+    org.apache.kafka.clients.consumer: INFO
+    org.springframework.kafka: INFO
+
+app:
+  kafka:
+    topic-name: logs-topic

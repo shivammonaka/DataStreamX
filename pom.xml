@@ -24,6 +24,7 @@
     <modules>
         <module>Producer-Service</module>
         <module>Producer-Proxy</module>
+        <module>Consumer-Service</module>
     </modules>
     <scm>
 		<connection/>

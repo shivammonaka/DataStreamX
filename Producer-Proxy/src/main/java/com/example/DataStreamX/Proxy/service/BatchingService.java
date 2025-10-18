@@ -54,10 +54,10 @@ public class BatchingService {
         if (buffer.isEmpty()) return;
         try {
             log.info("Flushing {} messages to Kafka", buffer.size());
-            for (LogEvent event : buffer) {
-                kafkaTemplate.send(kafkaTopic, event.getServiceName(),
-                        objectMapper.writeValueAsString(event));
-            }
+            // Serialize the entire batch into a JSON array
+            String batchJson = objectMapper.writeValueAsString(buffer);
+            // Send the batch as a single Kafka message
+            kafkaTemplate.send(kafkaTopic, batchJson);
         } catch (Exception e) {
             log.error("Failed to flush batch", e);
         } finally {

@@ -6,8 +6,17 @@ spring:
     name: Producer-Service
 
 producer-proxy:
-  url: http://localhost:8081/api/v1/logs
+  url:
+    log: http://localhost:8081/api/proxy/logs
+    ping: http://localhost:8081/api/proxy/ping
+
+app:
+  logging:
+    # Required by LogService constructor
+    levels: INFO,ERROR,DEBUG
 
 logging:
   level:
     root: INFO
+    org.springframework.web: INFO
+    com.example.DataStreamX: DEBUG
