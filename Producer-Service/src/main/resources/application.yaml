@@ -4,12 +4,6 @@ server:
 spring:
   application:
     name: Producer-Service
-  kafka:
-    bootstrap-servers: localhost:9092
-    producer:
-      # Using class names is fine here; KafkaProperties will convert & use them
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 producer-proxy:
   url: http://localhost:8081/api/v1/logs
@@ -17,13 +11,3 @@ producer-proxy:
 logging:
   level:
     root: INFO
-
-app:
-  kafka:
-    # topic names should be lowercase and use hyphens
-    topic-name: producer-logs
-  logging:
-    # interval for the scheduled producer (milliseconds)
-    interval-ms: 5000
-    # CSV list of levels that random generator can pick from
-    levels: INFO,ERROR,DEBUG

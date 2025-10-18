@@ -10,6 +10,7 @@ spring:
 
     producer:
       # Serializer classes
+      publish-topic: logs-topic
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 

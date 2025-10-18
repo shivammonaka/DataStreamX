@@ -3,6 +3,7 @@ package com.example.DataStreamX.Proxy.service;
 import com.example.DataStreamX.Proxy.model.LogEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public class BatchingService {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Value("${kafka.producer.publish-topic}")
+    private String kafkaTopic;
 
     // Configurable batching thresholds
     private static final int MAX_COUNT = 500;     // batch by count
@@ -51,8 +55,8 @@ public class BatchingService {
         try {
             log.info("Flushing {} messages to Kafka", buffer.size());
             for (LogEvent event : buffer) {
-//                kafkaTemplate.send("logs-topic", event.getServiceName(),
-//                        objectMapper.writeValueAsString(event));
+                kafkaTemplate.send(kafkaTopic, event.getServiceName(),
+                        objectMapper.writeValueAsString(event));
             }
         } catch (Exception e) {
             log.error("Failed to flush batch", e);
